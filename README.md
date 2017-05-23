@@ -1,2 +1,0 @@
-# flequiz
-flexible quiz app
