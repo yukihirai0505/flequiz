@@ -13,3 +13,4 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
 
+includeFilter in (Assets, LessKeys.less) := "*.less"

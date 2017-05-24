@@ -7,30 +7,28 @@
     <title>Flat UI Free 101 Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      <!-- Loading Bootstrap -->
+    <!-- Loading Bootstrap -->
     <link href="@routes.Assets.versioned("stylesheets/library/bootstrap.min.css")" rel="stylesheet">
-
-      <!-- Loading Flat UI -->
+    <!-- Loading Flat UI -->
     <link href="@routes.Assets.versioned("stylesheets/library/flat-ui.min.css")" rel="stylesheet">
-
+    <link href="@routes.Assets.versioned("stylesheets/main.css")" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
 
-      <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
-      <!--[if lt IE 9]>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
       <script src="@routes.Assets.versioned("javascripts/library/html5shiv.js")"></script>
       <script src="@routes.Assets.versioned("javascripts/library/respond.min.js")"></script>
     <![endif]-->
+
   </head>
   <body>
     <div class="container">
       @content
     </div>
-      <!-- /.container -->
-
-
-      <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <!-- /.container -->
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
     <script src="@routes.Assets.versioned("javascripts/library/jquery.min.js")"></script>
-      <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="@routes.Assets.versioned("javascripts/library/video.js")"></script>
     <script src="@routes.Assets.versioned("javascripts/library/flat-ui.min.js")"></script>
   </body>
