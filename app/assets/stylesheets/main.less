@@ -1,6 +1,38 @@
+@flequiz-base-color: #fafbfc;
+@flequiz-btn-color: #34495e;
+
+body {
+  background: @flequiz-base-color;
+}
+
+/*
+クイズ画面用のコンテナ
+ */
 .flequiz {
   padding: 30px;
   .progress-bar {
     width: 100%;
   }
+
+}
+
+.progress-bar-orange {
+  background-color: #FC9A11;
+}
+
+.btn-flequiz {
+  color: @flequiz-btn-color;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  &:hover, &.hover, &:focus, &:active, &.active {
+    color: white;
+    background-color: @flequiz-btn-color;
+  }
+}
+
+.flequiz-number {
+  color: gray;
+  float: left;
+  margin-right: 10px;
 }
