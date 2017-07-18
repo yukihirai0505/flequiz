@@ -1,0 +1,9 @@
+[program:api]
+process_name=%(program_name)s
+directory={{ ansible_env.PWD }}/api/
+command=/bin/bash -c "/usr/bin/java -Dconfig.file={{ ansible_env.PWD }}/api/application_prod.conf -jar {{ ansible_env.PWD }}/api/api-standalone.jar"
+autostart=true
+autorestart=true
+user=root
+redirect_stderr=true
+stdout_logfile=/dev/null

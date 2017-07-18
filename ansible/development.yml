@@ -1,0 +1,7 @@
+- hosts: flequiz
+  become: yes
+  roles:
+    - base
+    - nginx
+    - supervisor
+    - api

@@ -1,0 +1,40 @@
+upstream backend {
+    server 127.0.0.1:9000;
+}
+
+server {
+
+        listen 80;
+        server_name localhost;
+
+        charset UTF-8;
+        client_max_body_size 16M;
+        root  /home/ec2-user/web/build;
+        index index.html index.htm;
+
+        location / {
+          try_files $uri $uri/ /index.html;
+        }
+
+        location = /favicon.ico {
+          log_not_found off;
+          access_log off;
+        }
+
+        location ~* /\.well-known {
+          allow all;
+        }
+
+        location ~* /\. {
+          deny all;
+        }
+
+        location ~* \.(jpg|jpeg|gif|png|css|js|swf|ico|pdf|svg|eot|ttf|woff)$ {
+          access_log off;
+        }
+
+        location ~ /v1 {
+          proxy_pass  http://backend;
+        }
+
+}

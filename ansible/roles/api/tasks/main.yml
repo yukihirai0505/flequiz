@@ -1,0 +1,69 @@
+---
+# tasks file for api
+- name: Install packages
+  yum: name={{ item.name }}
+  with_items:
+  - { name: 'mysql'}
+
+- name: Setting linux PAM limits
+  pam_limits: domain={{ item.domain }} limit_type={{ item.limit_type }} limit_item={{ item.limit_item }} value={{ item.value }}
+  with_items:
+    - {domain: 'root', limit_type: 'soft', limit_item: 'nofile', value: '65536'}
+    - {domain: 'root', limit_type: 'hard', limit_item: 'nofile', value: '65536'}
+    - {domain: '*',    limit_type: 'soft', limit_item: 'nofile', value: '65536'}
+    - {domain: '*',    limit_type: 'hard', limit_item: 'nofile', value: '65536'}
+
+- name: Setting linux sysctl.conf
+  sysctl: name={{ item.name }} value={{ item.value }} sysctl_set=yes state=present reload=yes
+  with_items:
+    - {name: 'net.ipv4.tcp_tw_reuse', value: '1'}
+    - {name: 'net.ipv4.ip_local_port_range', value: '10240 65535'}
+
+- name: Create supervisord ini file [api]
+  template:
+    src: etc/supervisord.d/api.ini.j2
+    dest: /etc/supervisord.d/api.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart api
+
+- name: Configure supervisorctl [api]
+  supervisorctl:
+    name: api
+    state: present
+  ignore_errors: True
+
+- name: Create mysql opt directory
+  file:
+    path: /opt/mysql
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create mysql backup script file
+  template:
+    src: opt/mysql/backupmysql.sh.j2
+    dest: /opt/mysql/backupmysql.sh
+    group: root
+    mode: 0644
+
+- name: Set mysql backup cron file
+  cron:
+    name: send alert mail
+    minute: 0
+    hour: 2
+    user: root
+    cron_file: mysql_backup
+    job: "/bin/sh /opt/mysql/backupmysql.sh"
+
+- name: Set send alert mail cron file
+  cron:
+    name: send alert mail
+    weekday: 1
+    minute: 0
+    hour: 9
+    user: root
+    cron_file: send_alert_mail
+    job: "curl -X POST localhost:9000/v1/alerts"

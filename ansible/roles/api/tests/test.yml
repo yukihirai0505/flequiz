@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - ../../submodules/ansible-roles/nginx
+    - ../../submodules/ansible-roles/fluentd
+    - api
+  vars:
+    stage: dev
+    vpc_cidr: 127.0.0.1
+    nginx_remove_default_vhost: yes
+    fluentd_aggregator_host: localhost
+    fluentd_plugins:
+      - name: fluent-plugin-forest
+    ripre_admin_hostname: admin.localhost

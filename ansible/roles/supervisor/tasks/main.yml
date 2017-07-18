@@ -1,0 +1,76 @@
+---
+
+# This script was referring to the site here.
+# - https://github.com/jyotti/ansible-role-supervisor
+
+- name: Check supervisor installed
+  shell: which supervisorctl
+  register: checked_supervisorctl
+  failed_when: checked_supervisorctl.rc not in [0,1]
+  changed_when: False
+
+- name: Install python-setuptools
+  yum:
+    name: python-setuptools
+    state: present
+  when: checked_supervisorctl.rc == 1
+
+- name: Install supervisor
+  shell: easy_install --script-dir=/usr/bin supervisor
+  when: checked_supervisorctl.rc == 1
+
+- name: Copy the supervisor configuration file (/etc/supervisord.conf)
+  template:
+    src: etc/supervisord.conf.j2
+    dest: /etc/supervisord.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create supervisor log directory
+  file:
+    path: /var/log/supervisor
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create supervisor PID file directory
+  file:
+    path: /var/run/supervisor
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create supervisor included conf directory
+  file:
+    path: /etc/supervisord.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Setting logrotate supervisor
+  template:
+    src: etc/logrotate.d/supervisor.j2
+    dest: /etc/logrotate.d/supervisor
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart rsyslog
+
+- name: Copy the supervisor initscript file
+  template:
+    src: etc/init.d/supervisor.j2
+    dest: /etc/init.d/supervisor
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable supervisor service
+  become: yes
+  service:
+    name: supervisor
+    state: started
+    enabled: yes

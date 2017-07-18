@@ -1,0 +1,9 @@
+---
+# handlers file for api
+
+- name: update api
+  command: supervisorctl api update
+
+- name: restart api
+  supervisorctl: name=api state=restarted
+  ignore_errors: True
